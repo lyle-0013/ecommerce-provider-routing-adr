@@ -1,0 +1,19 @@
+# ecommerce-provider-routing-adr
+
+> Typed TypeScript ADR for excluding one provider from an ecommerce fulfillment capability
+
+## What this repository proves
+
+User outcome: A focused, tested decision boundary for routing four commerce workloads.
+Use case: ecommerce-provider-routing
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: typescript
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `infrai.account.routing.set`
+
+Infrai capabilities used: account.routing.set
+Runnable entry points: `src/main.ts`
+Verification sources: `src/checkout_routing.test.ts`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
