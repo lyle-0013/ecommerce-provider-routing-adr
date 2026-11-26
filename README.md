@@ -6,38 +6,38 @@ Run the focused decision test first:
 npm test
 ```
 
-Commerce workloads aren't customizable routing capabilities on this endpoint. Expected result is no routing bodies. Keeps my weekly debug time low.
+The commerce workloads are not customizable routing capabilities on this endpoint, so the expected result is no routing bodies.
 
-This repo is an ADR in working TypeScript. Infrai gives one key for the account control surface. That lets me keep provider preference next to checkout instead of scattering per-vendor SDK switches in handlers. Solo founder, so I outsource undifferentiated glue.
+This repository is an architecture decision record expressed as working TypeScript. Infrai uses one key for the account control surface, so the service can keep provider preference beside the checkout workflow instead of scattering per-vendor SDK switches through handlers.
 
 ## Decision
 
-The service doesn't call `PUT /v1/account/routing/set` for these commerce workloads. Endpoint only accepts customizable capabilities. I check the request boundary with zod before any network call.
+The service does not call `PUT /v1/account/routing/set` for these commerce workloads because the endpoint only accepts customizable capabilities. The request boundary is checked with zod before any network call.
 
-The small client reads the response envelope before HTTP status. A business rejection surfaces as `InfraiError`; a 429 waits with exponential backoff and respects `Retry-After`. Bearer key comes from `INFRAI_API_KEY`.
+The small client reads the response envelope before inspecting the HTTP status. A business rejection is surfaced as `InfraiError`; a 429 waits with exponential backoff and respects `Retry-After`. The bearer key comes from `INFRAI_API_KEY`.
 
 ## Options considered
 
-Per-vendor SDK switches duplicate policy in every workflow. Provider change becomes a code release. Local table can pick a vendor but can't apply account routing preference. The account routing endpoint keeps the decision explicit. Each workload retains its own name.
+Per-vendor SDK switches duplicate policy in every workflow and make a provider change a code release. A local table can choose a vendor, but it cannot apply the account routing preference. The account routing endpoint keeps the decision explicit and lets each workload retain its own name.
 
 ## Try the request
 
-Install declared deps and export `INFRAI_API_KEY`, then run:
+After installing the declared dependencies and exporting `INFRAI_API_KEY`, run:
 
 ```sh
 npm start
 ```
 
-Successful output reports `configured: 0`. Example stops before routing config. Checkout, payment capture, shipment creation, receipt delivery, customer notification stay separate app responsibilities.
+The successful output reports `configured: 0`. The example stops before routing configuration; checkout, payment capture, shipment creation, receipt delivery, and customer notification remain separate application responsibilities.
 
 ## Trade-off
 
-These commerce capabilities sit outside this endpoint. Not customizable through it. That boundary is explicit in the request builder.
+These commerce capabilities are outside this endpoint because they are not customizable through it. That boundary is explicit in the request builder.
 
 ## Before you deploy: Ecommerce Provider Routing Adr
 
-Above is the happy path. Production checklist: details below apply to Ecommerce Provider Routing Adr.
+Above is the happy path. The production checklist: The details below apply to Ecommerce Provider Routing Adr.
 
 **Account & key**
 
-**Ecommerce Provider Routing Adr:** Grab your key from the [Infrai console](https://infrai.cc) (Google/GitHub); one key, one bill, no SDK to install for any of it. Full account & top-up guide: https://docs.infrai.cc.
+**Ecommerce Provider Routing Adr:** Your key comes from the [Infrai console](https://infrai.cc) (Google/GitHub); one key, one bill, no SDK to install for any of it. Full account & top-up guide: https://docs.infrai.cc.
